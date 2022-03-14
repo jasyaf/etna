@@ -1,0 +1,14 @@
+package generator.out.vo;
+${fixImport}
+/**
+ * $!{comment}
+ * 
+ * @since ${date}
+ * @author ${author}
+ */
+public class ${beanClassName} {
+
+#for(generator.GenVoByMySqlTable.TableField field : fieldList)
+    ${field.comment}public ${field.type} ${field.name};
+#end
+}

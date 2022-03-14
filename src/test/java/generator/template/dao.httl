@@ -1,0 +1,13 @@
+package generator.out.dao;
+
+import org.springframework.stereotype.Repository;
+
+/**
+ * $!{comment}
+ * 
+ * @since ${date}
+ * @author ${author}
+ */
+@Repository
+public class ${daoClassName} {
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:component-scan base-package="org.etnaframework"/>
+    <context:component-scan base-package="test"/>
+
+    <!-- 读入配置信息，支持从配置文件读取，也可以自定义配置读取方法，比如从数据库读取 -->
+    <bean class="org.etnaframework.core.spring.ConfigAnnotationBeanPostProcessor">
+        <!-- config热加载的任务执行周期，默认是30秒钟扫描检测一次 -->
+        <!--    <property name="configReloadPeriod" value="10"/> -->
+        <property name="keyValueLoaders">
+            <list>
+                <bean class="org.etnaframework.core.spring.PropertyKeyValueConfigLoader">
+                    <property name="locations">
+                        <list>
+                            <value>classpath:serverconfig.properties</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>

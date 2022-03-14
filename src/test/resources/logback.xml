@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="30 seconds">
+
+    <!-- 输出格式配置 -->
+    <property name="NORMAL_PATTERN" value="%date{HH:mm:ss.SSS,GMT+8}|%30.30(%class{30}.%method)|%-5level| %message \\(%file:%line\\) %-5(%thread) %X{userId}%X{operation}%n%xException"/>
+    <property name="ALARM_PATTERN" value="%date{HH:mm:ss.SSS,GMT+8}|%message%n%-5(%thread) %X{userId}%X{operation}%n%xException"/>
+    <property name="STAT_NORMAL_PATTERN" value="%date{HH:mm:ss.SSS,GMT+8}|%message%n"/>
+
+    <!-- 内存log按log名称分类，只保存最新的一些，可用于在页面上快速预览 -->
+    <appender name="fix_size_mem" class="org.etnaframework.core.logging.logback.FixSizeMemAppender">
+        <size>100</size>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${NORMAL_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- 应用程序执行日志 -->
+    <appender name="console_normal" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>${NORMAL_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="log_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>logs/logFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>32</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${NORMAL_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- HTTP接口访问日志，在请求结束之后记录 -->
+    <appender name="access_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <file>logs/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/access.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>32</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>${STAT_NORMAL_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+    <appender name="console_access" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <encoder>
+            <pattern>${STAT_NORMAL_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="http_error_mail" class="ch.qos.logback.classic.net.SMTPAppender">
+        <SMTPHost>smtp.exmail.qq.com</SMTPHost>
+        <SMTPPort>465</SMTPPort>
+        <SSL>true</SSL>
+        <Username>monitor@buga.cn</Username>
+        <Password>cishi123456</Password>
+        <From>monitor@buga.cn</From>
+
+        <To>hujiachao&lt;hujiachao@sinx.com&gt;</To>
+
+        <Subject>%X{mailTitle}</Subject>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${ALARM_PATTERN}</pattern>
+        </layout>
+    </appender>
+
+    <!-- 日志级别和输出配置 -->
+    <root level="info">
+        <appender-ref ref="fix_size_mem"/>
+        <!-- <appender-ref ref="log_file" /> -->
+        <!-- 部署时无需输出到控制台，要注释掉此行 -->
+        <appender-ref ref="console_normal"/>
+    </root>
+    <logger name="access.org.etnaframework.core.web.DispatchFilter" level="info" additivity="false">
+        <!-- <appender-ref ref="access_file" /> -->
+        <!-- 部署时无需输出到控制台，要注释掉此行 -->
+        <appender-ref ref="console_access"/>
+    </logger>
+    <logger name="org.etnaframework.core.web.DispatchFilter" level="error" additivity="false">
+        <!-- <appender-ref ref="log_file" /> -->
+        <!-- 本机测试不需要发邮件，要注释掉此行 -->
+        <appender-ref ref="http_error_mail"/>
+        <!-- 部署时无需输出到控制台，要注释掉此行 -->
+        <appender-ref ref="console_normal"/>
+    </logger>
+
+    <logger name="org.etnaframework" level="debug"/>
+</configuration>

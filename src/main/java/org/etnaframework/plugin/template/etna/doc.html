@@ -1,0 +1,350 @@
+<!-- #set(java.util.Map.Entry<String, Collection<org.etnaframework.plugin.doc.DocCmd>> doc) -->
+<!-- #set(org.etnaframework.plugin.doc.DocMeta docMeta) -->
+<!-- #set(org.etnaframework.plugin.doc.DocCmdParam param) -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>${title}</title>
+    <style type="text/css">
+        body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, th, td {
+            padding: 0;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        html, body {
+            width: 100%;
+            overflow: auto;
+        }
+
+        body {
+            margin: 0;
+            font: normal 12px/1.6em simsun;
+        }
+
+        #header {
+            border-bottom: 1px #CCCCCC dashed;
+            color: #999;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #wrapper {
+            width: 100%;
+        }
+
+        #sidebar {
+            float: left;
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #sidebar h2 {
+            /*导航栏的title不给选中*/
+            -moz-user-select: none; /*火狐*/
+            -webkit-user-select: none; /*webkit浏览器*/
+            -ms-user-select: none; /*IE10*/
+            -khtml-user-select: none; /*早期浏览器*/
+            user-select: none;
+        }
+
+        h2 {
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 400;
+            padding: 4px 4px 4px 15px;
+            text-align: left;
+            margin: 0;
+        }
+
+        h2:HOVER {
+            background: none repeat scroll 0 0 #4F81BD;
+            color: white;
+        }
+
+        #sidebar ul {
+            margin: 0;
+            background: none repeat scroll 0 0 white;
+            display: none;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        li h2 {
+            padding-left: 25px;
+            text-align: left;
+            background-color: white;
+        }
+
+        .desc {
+            float: right;
+            width: 100%;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+            word-break: normal;
+        }
+
+        #content h3 {
+            background: none repeat scroll 0 0 #95B3D7;
+            color: #FFFFFF;
+            margin: 5px auto;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: 400;
+            overflow: hidden;
+        }
+
+        #content h2 {
+            background: none repeat scroll 0 0 #4F81BD;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 auto;
+            padding: 5px;
+            text-align: left;
+        }
+
+        #content h4 {
+            background: none repeat scroll 0 0 #DBE5F1;
+            margin: 5px auto 5px 5px;
+            padding: 5px;
+            font-weight: 400;
+        }
+
+        table {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        td {
+            width: 17%;
+            margin-left: 5px;
+        }
+
+        #content span {
+            display: block;
+            margin-left: 30px;
+        }
+
+        #content h3 table td {
+            font-size: 12px;
+            color: #FFFFFF;
+        }
+
+        #content h4 table td {
+            font-size: 12px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        #content .desc a h2:HOVER {
+
+        }
+
+        #content .desc a:LINK {
+            color: #000
+        }
+    </style>
+    <script type="text/javascript">
+        function showul(element) {
+            var ul = get_nextsibling(element);
+            if (ul.style.display == "block")
+                ul.style.display = "none";
+            else {
+                ul.style.display = "block";
+            }
+        }
+        function get_nextsibling(n) {
+            var x = n.nextSibling;
+            while (x.nodeType != 1) {
+                x = x.nextSibling;
+            }
+            return x;
+        }
+        function showdesc(elementId) {
+            var desc = document.getElementById(elementId);
+            var descs = getElementsByClass("desc", "div");
+            for (var i = 0; i < descs.length; i++) {
+                if (descs[i] != desc && descs[i].style.display == "block")
+                    descs[i].style.display = "none";
+            }
+            if (desc.style.display == "none") {
+                desc.style.display = "block";
+                desc.scrollIntoView();
+            }
+        }
+        function getElementsByClass(searchClass, tag) {
+            var classElements = new Array();
+            if (tag == null)
+                tag = '*';
+            var els = document.getElementsByTagName(tag);
+            var elsLen = els.length;
+            var pattern = new RegExp("(^|\s)" + searchClass + "(\s|$)");
+            for (i = 0, j = 0; i < elsLen; i++) {
+                if (pattern.test(els[i].className)) {
+                    classElements[j] = els[i];
+                    j++;
+                }
+            }
+            return classElements;
+        }
+    </script>
+</head>
+<body>
+<div id="wrapper">
+    <!-- ##输出菜单导航栏 -->
+    <div id="roller" style="height: 100%; width: 300px; position: fixed; overflow: auto; left: 0; background-color: #DBE5F1;">
+        <div id="sidebar">
+            <h2 style="text-align: center; font-weight: bold; background: none repeat scroll 0 0 #4F81BD; color: white;"
+                onclick="location.href='';">${title}</h2>
+            <h2 style="text-align: center; font-weight: bold; background: none repeat scroll 0 0 #95B3D7; color: white;"
+                onclick="location.href='#rtnCodes';">接口返回码定义</h2>
+            <!-- #for(doc : doctree) -->
+            <h2 onclick="showul(this)">${doc.getKey()}</h2>
+            <ul>
+                <!-- #for(docMeta : doc.getValue())  -->
+                <li onclick="location.href='#${docMeta.cmdPath}';">
+                    <h2>${docMeta.cmdPath}</h2>
+                </li>
+                <!-- #end -->
+            </ul>
+            <!-- #end -->
+        </div>
+    </div>
+
+    <!-- ##输出Cmd的接口内容 -->
+    <div id="content" style="margin: 0 10px 0 305px;">
+        <!-- #for(doc : doctree) -->
+        <!-- #for(docMeta : doc.getValue()) -->
+
+        <div class="desc" id="${docMeta.cmdPath}">
+            <!-- ##打印接口名－URI行 -->
+            <div onclick="location.href='#${docMeta.cmdPath}';">
+                <!-- #if(docMeta.cmd.length == 1) -->
+                <h2>${docMeta.cmd[0]} ${docMeta.cmdPath}</h2>
+                <!-- #else -->
+                <!-- ##如果描述有多行，则分行展示 -->
+                <!-- #for(cmd : docMeta.cmd) -->
+                <h2>${cmd}</h2>
+                <!-- #end -->
+                <h2>${docMeta.cmdPath}</h2>
+                <!-- #end -->
+            </div>
+            <h4>
+                    <span>
+                        <!-- #for(cmd : docMeta.cmd) -->
+                        <!-- #if(docMeta.domain.isEmpty()) -->
+                        <a href="${domain}${docMeta.cmdPath}" target="_blank">${domain}${docMeta.cmdPath}</a>
+                        <!-- #else -->
+                        <a href="${docMeta.domain}${docMeta.cmdPath}" target="_blank">${docMeta.domain}${docMeta.cmdPath}</a>
+                        <!-- #end -->
+                        <!-- #end -->
+                    </span>
+            </h4>
+
+            <!-- #if(docMeta.session || docMeta.author ) -->
+            <!-- ##如果两个值都为空，就不打印此行了 -->
+            <h3>
+                <table>
+                    <tr>
+                        <td>接口验证要求</td>
+                        <td>${docMeta.session}</td>
+                        <td></td>
+                        <td></td>
+                        <td>${docMeta.author}</td>
+                    </tr>
+                </table>
+            </h3>
+            <!-- #end -->
+
+            <!-- #if(docMeta.params) -->
+            <h3>请求参数（WEB表单方式提交的数据） 如无特别说明，系统默认的参数值编码方式为UTF-8 UrlEncoded</h3>
+                <span style="display: none;">
+                    假定接口为http://127.0.0.1/user 需要传入userId=501，name=测试
+                    <br/>
+                    <br/>
+                    RESTful&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET方式请求，URL为http://127.0.0.1/user/501/%E6%B5%8B%E8%AF%95
+                    <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;参数顺序按照本文档所展示的顺序从上至下
+                    <br/>
+                    <br/>
+                    GET UrlEncoded&nbsp;&nbsp;&nbsp;&nbsp;GET方式请求，URL为http://127.0.0.1/user?userId=501&name=%E6%B5%8B%E8%AF%95
+                    <br/>
+                    <br/>
+                    POST UrlEncoded&nbsp;&nbsp;&nbsp;POST方式请求，URL为http://127.0.0.1/user
+                    <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请求头中的Content-Type为application/x-www-form-urlencoded
+                    <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Content部分为userId=501&name=%E6%B5%8B%E8%AF%95
+                    <br/>
+                    <br/>
+                    Cookie&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET/POST方式请求，URL为http://127.0.0.1/user
+                    <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cookie部分为userId=501;
+                    name=%E6%B5%8B%E8%AF%95;
+                </span>
+            <!-- #for(param : docMeta.params) -->
+            <h4>
+                <table>
+                    <tr>
+                        <td>${param.field}</td>
+                        <td>${param.name}</td>
+                        <td>${param.type}</td>
+                        <td>${param.required}</td>
+                        <td>${param.defaultValue}</td>
+                        <td>${param.scope}</td>
+                    </tr>
+                </table>
+            </h4>
+                <span>
+                    <!-- #if(param.sample) -->
+                    取值范例：${param.sample}
+                    <br/>
+                    <!-- #end -->
+                    $!{param.desc.escapeHtml()}
+                    <br/>
+                </span>
+            <!-- #end -->
+            <!-- #end -->
+
+            <h3 style="display: none;">请求参数（通过POST方式在CONTENT中传送的数据） 如无特别说明，系统默认的字符串编码方式为UTF-8</h3>
+            <span style="display: none;">说明：本部分的参数仅限于以下三种</span>
+
+            <!-- #if( docMeta.contentType || docMeta.returnDesc) -->
+            <h3>
+                <table>
+                    <tr>
+                        <td>回包</td>
+                        <td>${docMeta.contentType}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </h3>
+                <span>
+                    $!{docMeta.returnDesc.escapeHtml()}
+                    <br/>
+                </span>
+            <!-- #end -->
+        </div>
+
+        <!-- #end -->
+        <!-- #end -->
+    </div>
+</div>
+</body>
+</html>
